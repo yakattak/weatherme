@@ -119,7 +119,7 @@ var popCurrent = function(current, city, state){
     //append weather data to temp container
     tempEl.textContent = "Temperature: " + currentTemp;
     var tempSpan = document.createElement("span");
-    tempSpan.innerHTML= "&#176";
+    tempSpan.innerHTML= "&#176 F";
     tempEl.appendChild(tempSpan);
     humEl.textContent ="Humidity: " + currentHum + "%";
     winEl.textContent = "Wind Speed: " + currentWind + "mph";
@@ -199,7 +199,7 @@ var popFuture = function(daily){
         //append weather data to temp container
         tempEl.textContent = "Temperature: " + currentTemp;
         var tempSpan = document.createElement("span");
-        tempSpan.innerHTML= "&#176";
+        tempSpan.innerHTML= "&#176 F";
         tempEl.appendChild(tempSpan);
         humEl.textContent ="Humidity: " + currentHum + "%";
         winEl.textContent = "Wind Speed: " + currentWind + "mph";
