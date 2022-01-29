@@ -79,7 +79,7 @@ var popCurrent = function(current, city, state){
     var conditionIcon = current.weather[0].icon;
 
     var conditionUrl = "https://openweathermap.org/img/wn/"+ conditionIcon +"@2x.png"
-
+    
     //get container for current weather
     var currentContainer = document.querySelector("#current-city");
 
@@ -162,6 +162,12 @@ var popFuture = function(daily){
         month = date.getMonth() + 1;
         year = date.getFullYear();
 
+        var conditionIcon = daily[i].weather[0].icon
+        //console.log (conditionIcon);
+        var conditionUrl = "https://openweathermap.org/img/wn/"+ conditionIcon +"@2x.png"
+    
+
+
         //get container for date weather
         var currentContainer = document.querySelector("#day-" + i);
 
@@ -169,10 +175,14 @@ var popFuture = function(daily){
         var tempContainer = document.createElement("div");
         tempContainer.setAttribute("class", "card temp");
  
-        //append 
-        var cityNameEl = document.createElement("p");
-        cityNameEl.textContent = "(" + month + "/" + day +"/" + year + ")";
-        tempContainer.appendChild(cityNameEl);
+        //append date
+        var futureEl = document.createElement("p");
+        futureEl.textContent = "(" + month + "/" + day +"/" + year + ")";
+        tempContainer.appendChild(futureEl);
+
+        
+        var weatherEl = document.createElement("img");
+         weatherEl.setAttribute("src", conditionUrl);
      
         //get current temp, hum, wind, uv
         var currentTemp = daily[i].temp.day;
@@ -194,6 +204,7 @@ var popFuture = function(daily){
         humEl.textContent ="Humidity: " + currentHum + "%";
         winEl.textContent = "Wind Speed: " + currentWind + "mph";
         uvEl.textContent = "UV Index: " + currentUV;
+        tempContainer.appendChild(weatherEl);
         tempContainer.appendChild(tempEl);
         tempContainer.appendChild(humEl);
         tempContainer.appendChild(winEl);
