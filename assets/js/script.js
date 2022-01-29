@@ -33,6 +33,7 @@ var getWeatherApi =function(cityLat,cityLon, city, state) {
 
 // get lat and lon from city
 var getCoorApi = function(city, state) {
+    console.log ("running coordinates " + city + " " + state);
     var apiUrl = "http://api.openweathermap.org/geo/1.0/direct?q="+city+"+&limit=5&appid=9b8bdab4f43757c17c5fae2dcf99bd2a";
     fetch(apiUrl).then(function(response) {
         if (response.ok) {
@@ -43,6 +44,9 @@ var getCoorApi = function(city, state) {
                         var cityLon = data[i].lon;
                         var cityLat = data[i].lat;
                         var city = data[i].name;
+                        //run save to local then run to get coordinates/weather
+                        saveLocal (city, state);
+                        loadLocal();
                         //console.log(cityLat,cityLon, cityState, cityCountry);
                         i = data.length+1;
                         getWeatherApi(cityLat, cityLon, city, state);
@@ -51,7 +55,7 @@ var getCoorApi = function(city, state) {
                     }
             }
             });
-        };
+        } else {console.log("NOT OKAY")};
     });
 }
 
@@ -185,23 +189,41 @@ var taskButtonHandler = function (event) {
     event.preventDefault();
     //get city and state input
 
+    //check what button is clicked
     var targetEl = event.target;
     if (targetEl.matches("#search-btn")) {
-        var cityInput = document.querySelector("input[name='city']").value;
-    
-
-    
+        var cityInput = document.querySelector("input[name='city']").value.trim();
+            if (cityInput) {
+                //console.log ("input is " + cityInput);
+            }
+      
     //console.log(cityInput);
 
         var stateInput = document.querySelector("select[id='state'").value;
     };
-
     if (targetEl.matches("#state-history")) {
-        cityInput = "Albany";
-        stateInput = "New York";
+        cityState = targetEl.textContent.split(',');
+        cityInput = cityState[0].trim();
+        stateInput = cityState[1].trim();
+        //console.log (stateInput);
     }
-    //console.log(stateInput);
+          
+    //run function to get coordinates   
+    getCoorApi(cityInput,stateInput);
+}
 
+var saveLocal = function(city, state) {
+
+    searchHistory.unshift([city,state]);
+    //console.log (searchHistory);
+    localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+
+
+}
+//load any search history information
+var loadLocal = function() {
+
+    //remove temp information
     var taskSelected = document.getElementsByClassName("temp ");
     //console.log (taskSelected.length);
         if (taskSelected) {
@@ -209,27 +231,11 @@ var taskButtonHandler = function (event) {
             while (taskSelected.length > 0) {
                 taskSelected[0].remove();
             };
-            
-            
+                       
         };
-       
-    //run save to local then run to get coordinates/weather
-    saveLocal (cityInput, stateInput);
-    loadLocal();
-    
-    getCoorApi(cityInput,stateInput);
-}
-
-var saveLocal = function(city, state) {
-
-    searchHistory.unshift([city,state]);
-    console.log (searchHistory);
-    localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
 
 
-}
-
-var loadLocal = function() {
+    //set search history to old search history
     searchHistory = localStorage.getItem("searchHistory");
     // if there are no tasks, set tasks to an empty array and return out of the function
     if (!searchHistory) {
