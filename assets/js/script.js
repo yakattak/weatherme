@@ -285,6 +285,7 @@ var loadLocal = function() {
     searchHistory = localStorage.getItem("searchHistory");
     // if there are no tasks, set tasks to an empty array and return out of the function
     if (!searchHistory) {
+        searchHistory = [];
       return false;
     }
     //console.log("Saved tasks found!");
