@@ -1,5 +1,8 @@
 var formEl = document.querySelector("#search-btn");
 var stateEl = document.querySelector("#state");
+var historyEl = document.querySelector("#history-buttons")
+
+var searchHistory = [];
 
 
 
@@ -41,6 +44,7 @@ var getCoorApi = function(city, state) {
                         var cityLat = data[i].lat;
                         var city = data[i].name;
                         //console.log(cityLat,cityLon, cityState, cityCountry);
+                        i = data.length+1;
                         getWeatherApi(cityLat, cityLon, city, state);
                         
                         
@@ -181,13 +185,24 @@ var taskButtonHandler = function (event) {
     event.preventDefault();
     //get city and state input
 
-    var cityInput = document.querySelector("input[name='city']").value;
+    var targetEl = event.target;
+    if (targetEl.matches("#search-btn")) {
+        var cityInput = document.querySelector("input[name='city']").value;
+    
+
+    
     //console.log(cityInput);
 
-    var stateInput = document.querySelector("select[id='state'").value;
+        var stateInput = document.querySelector("select[id='state'").value;
+    };
+
+    if (targetEl.matches("#state-history")) {
+        cityInput = "Albany";
+        stateInput = "New York";
+    }
     //console.log(stateInput);
 
-    var taskSelected = document.getElementsByClassName("temp");
+    var taskSelected = document.getElementsByClassName("temp ");
     //console.log (taskSelected.length);
         if (taskSelected) {
             //console.log ("length is " + taskSelected.length)
@@ -197,9 +212,63 @@ var taskButtonHandler = function (event) {
             
             
         };
-        
-
+       
+    //run save to local then run to get coordinates/weather
+    saveLocal (cityInput, stateInput);
+    loadLocal();
+    
     getCoorApi(cityInput,stateInput);
 }
 
+var saveLocal = function(city, state) {
+
+    searchHistory.unshift([city,state]);
+    console.log (searchHistory);
+    localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+
+
+}
+
+var loadLocal = function() {
+    searchHistory = localStorage.getItem("searchHistory");
+    // if there are no tasks, set tasks to an empty array and return out of the function
+    if (!searchHistory) {
+      return false;
+    }
+    console.log("Saved tasks found!");
+    // else, load up saved tasks
+  
+    // parse into array of objects
+    searchHistory = JSON.parse(searchHistory);
+  
+    // loop through savedTasks array
+    for (var i = 0; i < searchHistory.length; i++) {
+      if (i<5) {
+         popHistory(searchHistory[i]);
+      }
+    }
+  };
+
+//function to save data
+
+
+//popluate history list
+popHistory = function(searchHistory) {
+    var historyContent = document.querySelector("#history-buttons");
+
+    var stateBtn = document.createElement("button");
+    stateBtn.setAttribute("class", "btn temp");
+    stateBtn.setAttribute("id", "state-history");
+    
+    stateBtn.textContent = searchHistory[0] + ", " + searchHistory[1];
+
+    historyContent.appendChild(stateBtn);
+
+};
+
+loadLocal();
+
 formEl.addEventListener("click", taskButtonHandler);
+
+
+historyEl.addEventListener("click", taskButtonHandler);
