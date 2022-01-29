@@ -35,7 +35,7 @@ var getWeatherApi =function(cityLat,cityLon, city, state) {
 };
 
 // get lat and lon from city
-var getCoorApi = function(city, state) {
+var getCoorApi = function(city, state, history) {
     //console.log ("running coordinates " + city + " " + state);
     var apiUrl = "https://api.openweathermap.org/geo/1.0/direct?q="+city+"+&limit=5&appid=9b8bdab4f43757c17c5fae2dcf99bd2a";
     fetch(apiUrl).then(function(response) {
@@ -48,10 +48,13 @@ var getCoorApi = function(city, state) {
                         var cityLat = data[i].lat;
                         var city = data[i].name;
                         //run save to local then run to get coordinates/weather
-                        saveLocal (city, state);
-                        loadLocal();
+                        if (history) {
+                            saveLocal (city, state);
+                            
+                            };
                         //console.log(cityLat,cityLon, cityState, cityCountry);
                         i = data.length+1;
+                        loadLocal();
                         getWeatherApi(cityLat, cityLon, city, state);
                         
                         
@@ -246,16 +249,18 @@ var taskButtonHandler = function (event) {
     //console.log(cityInput);
 
         var stateInput = document.querySelector("select[id='state'").value;
+        var history = true;
     };
     if (targetEl.matches("#state-history")) {
         cityState = targetEl.textContent.split(',');
         cityInput = cityState[0].trim();
         stateInput = cityState[1].trim();
+        var history = false;
         //console.log (stateInput);
     }
           
     //run function to get coordinates   
-    getCoorApi(cityInput,stateInput);
+    getCoorApi(cityInput,stateInput, history);
 }
 
 var saveLocal = function(city, state) {
