@@ -37,7 +37,7 @@ var getWeatherApi =function(cityLat,cityLon, city, state) {
 // get lat and lon from city
 var getCoorApi = function(city, state) {
     //console.log ("running coordinates " + city + " " + state);
-    var apiUrl = "http://api.openweathermap.org/geo/1.0/direct?q="+city+"+&limit=5&appid=9b8bdab4f43757c17c5fae2dcf99bd2a";
+    var apiUrl = "https://api.openweathermap.org/geo/1.0/direct?q="+city+"+&limit=5&appid=9b8bdab4f43757c17c5fae2dcf99bd2a";
     fetch(apiUrl).then(function(response) {
         if (response.ok) {
             response.json().then(function(data) {
