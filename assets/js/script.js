@@ -317,10 +317,10 @@ popHistory = function(searchHistory) {
     historyContent.appendChild(stateBtn);
 
 };
-
+//load saved history on open
 loadLocal();
 
+
+//listen for clicks on search history or on new search
 formEl.addEventListener("click", taskButtonHandler);
-
-
 historyEl.addEventListener("click", taskButtonHandler);
