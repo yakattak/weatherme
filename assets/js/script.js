@@ -1,7 +1,10 @@
+
+//get elements from html that will be needed
 var formEl = document.querySelector("#search-btn");
 var stateEl = document.querySelector("#state");
 var historyEl = document.querySelector("#history-buttons")
 
+//create search history array
 var searchHistory = [];
 
 
@@ -33,7 +36,7 @@ var getWeatherApi =function(cityLat,cityLon, city, state) {
 
 // get lat and lon from city
 var getCoorApi = function(city, state) {
-    console.log ("running coordinates " + city + " " + state);
+    //console.log ("running coordinates " + city + " " + state);
     var apiUrl = "http://api.openweathermap.org/geo/1.0/direct?q="+city+"+&limit=5&appid=9b8bdab4f43757c17c5fae2dcf99bd2a";
     fetch(apiUrl).then(function(response) {
         if (response.ok) {
@@ -59,10 +62,10 @@ var getCoorApi = function(city, state) {
     });
 }
 
+// function to populate teh current weather conditions
 var popCurrent = function(current, city, state){
 
     //getdate
-
     var date = calcDate (current.dt);
 
     //day/month/year
@@ -72,6 +75,11 @@ var popCurrent = function(current, city, state){
 
     //console.log(current);
 
+    //get weather icon
+    var conditionIcon = current.weather[0].icon;
+
+    var conditionUrl = "https://openweathermap.org/img/wn/"+ conditionIcon +"@2x.png"
+
     //get container for current weather
     var currentContainer = document.querySelector("#current-city");
 
@@ -79,16 +87,28 @@ var popCurrent = function(current, city, state){
     var tempContainer = document.createElement("div");
     tempContainer.setAttribute("class", "card temp")
 
-    //append 
+    //city name and weather icon up top
+    var cityNameContainer = document.createElement("div");
+    cityNameContainer.setAttribute("class", "align-center flex-row");
+
     var cityNameEl = document.createElement("p");
     cityNameEl.textContent = city + ", " + state + " (" + month + "/" + day +"/" + year + ")";
-    tempContainer.appendChild(cityNameEl);
+    
+    var weatherEl = document.createElement("img");
+    weatherEl.setAttribute("src", conditionUrl);
+    
+    cityNameContainer.appendChild(cityNameEl);
+    cityNameContainer.appendChild(weatherEl);
+
+    tempContainer.appendChild(cityNameContainer);
     
     //get current temp, hum, wind, uv
     var currentTemp = current.temp;
     var currentHum = current.humidity;
     var currentWind = current.wind_speed;
     var currentUV  = current.uvi;
+    
+    
 
     //create p elements to hold weather data
     var tempEl = document.createElement("p");
@@ -104,10 +124,25 @@ var popCurrent = function(current, city, state){
     humEl.textContent ="Humidity: " + currentHum + "%";
     winEl.textContent = "Wind Speed: " + currentWind + "mph";
     uvEl.textContent = "UV Index: " + currentUV;
+
+    //determine UV color
+    if (currentUV <= 2.5) {
+        uvEl.setAttribute("class", "uv-green")
+        } if (currentUV >2.5 && currentUV <=5.5) {
+        uvEl.setAttribute("class", "uv-yellow")
+            } if (currentUV > 5.5 && currentUv <= 7.5) {
+                uvEl.setAttribute("class", "uv-orange")
+                } if (currentUV > 7.5) {
+                    uvEl.setAttribute("class", "uv-red")
+                    }
+
+
     tempContainer.appendChild(tempEl);
     tempContainer.appendChild(humEl);
     tempContainer.appendChild(winEl);
     tempContainer.appendChild(uvEl);
+
+    
 
     //append temp container to current weather container
     currentContainer.appendChild(tempContainer);
@@ -241,7 +276,7 @@ var loadLocal = function() {
     if (!searchHistory) {
       return false;
     }
-    console.log("Saved tasks found!");
+    //console.log("Saved tasks found!");
     // else, load up saved tasks
   
     // parse into array of objects
@@ -249,7 +284,7 @@ var loadLocal = function() {
   
     // loop through savedTasks array
     for (var i = 0; i < searchHistory.length; i++) {
-      if (i<5) {
+      if (i<8) {
          popHistory(searchHistory[i]);
       }
     }

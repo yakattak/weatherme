@@ -41,6 +41,7 @@
   p {
     font-size: 1.2rem;
     text-align: left;
+    align-items: center;
   }
   
    .btn {
@@ -185,6 +186,22 @@
     border-radius: var(--border-radius);
   }
   
+  .uv-green {
+    background-color: green;
+  }
+
+  .uv-orange {
+    background-color: orange;
+  }
+
+  .uv-yellow {
+    background-color: yellow;
+  }
+
+  .uv-red {
+    background-color: red;
+  }
+
   /* HEIGHT / WIDTH UTILS */
   .min-100-vh {
     min-height: 100vh;
