@@ -69,7 +69,7 @@ var popCurrent = function(current, city, state){
 
     //create container to be removed when new city selected
     var tempContainer = document.createElement("div");
-    tempContainer.setAttribute("class", "card")
+    tempContainer.setAttribute("class", "card temp")
 
     //append 
     var cityNameEl = document.createElement("p");
@@ -109,7 +109,7 @@ var popCurrent = function(current, city, state){
 
 //populate futur edate
 var popFuture = function(daily){
-    console.log(daily);
+    //console.log(daily);
 
     for (i=1; i<6; i ++) {
         var date = calcDate (daily[i].dt);
@@ -124,7 +124,7 @@ var popFuture = function(daily){
 
         //create container to be removed when new city selected
         var tempContainer = document.createElement("div");
-        tempContainer.setAttribute("class", "card")
+        tempContainer.setAttribute("class", "card temp");
  
         //append 
         var cityNameEl = document.createElement("p");
@@ -182,10 +182,24 @@ var taskButtonHandler = function (event) {
     //get city and state input
 
     var cityInput = document.querySelector("input[name='city']").value;
-    console.log(cityInput);
+    //console.log(cityInput);
 
     var stateInput = document.querySelector("select[id='state'").value;
-    console.log(stateInput);
+    //console.log(stateInput);
+
+    var taskSelected = document.getElementsByClassName("temp");
+    //console.log (taskSelected.length);
+        if (taskSelected) {
+            //console.log ("length is " + taskSelected.length)
+            while (taskSelected.length > 0) {
+                taskSelected[0].remove();
+            };
+            
+            
+        };
+        
+
+    getCoorApi(cityInput,stateInput);
 }
 
 formEl.addEventListener("click", taskButtonHandler);
