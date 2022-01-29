@@ -1,6 +1,5 @@
-var cityName = "Albany";
-var stateName = "Georgia";
-
+var formEl = document.querySelector("#search-btn");
+var stateEl = document.querySelector("#state");
 
 
 
@@ -44,6 +43,7 @@ var getCoorApi = function(city, state) {
                         //console.log(cityLat,cityLon, cityState, cityCountry);
                         getWeatherApi(cityLat, cityLon, city, state);
                         
+                        
                     }
             }
             });
@@ -69,6 +69,7 @@ var popCurrent = function(current, city, state){
 
     //create container to be removed when new city selected
     var tempContainer = document.createElement("div");
+    tempContainer.setAttribute("class", "card")
 
     //append 
     var cityNameEl = document.createElement("p");
@@ -111,51 +112,52 @@ var popFuture = function(daily){
     console.log(daily);
 
     for (i=1; i<6; i ++) {
-    var date = calcDate (daily[i].dt);
+        var date = calcDate (daily[i].dt);
 
-    //day/month/year
-    day = date.getDate();
-    month = date.getMonth() + 1;
-    year = date.getFullYear();
+        //day/month/year
+        day = date.getDate();
+        month = date.getMonth() + 1;
+        year = date.getFullYear();
 
-     //get container for date weather
-     var currentContainer = document.querySelector("#day-" + i);
+        //get container for date weather
+        var currentContainer = document.querySelector("#day-" + i);
 
-     //create container to be removed when new city selected
-     var tempContainer = document.createElement("div");
+        //create container to be removed when new city selected
+        var tempContainer = document.createElement("div");
+        tempContainer.setAttribute("class", "card")
  
-     //append 
-     var cityNameEl = document.createElement("p");
-     cityNameEl.textContent = "(" + month + "/" + day +"/" + year + ")";
-     tempContainer.appendChild(cityNameEl);
+        //append 
+        var cityNameEl = document.createElement("p");
+        cityNameEl.textContent = "(" + month + "/" + day +"/" + year + ")";
+        tempContainer.appendChild(cityNameEl);
      
-     //get current temp, hum, wind, uv
-     var currentTemp = daily[i].temp.day;
-       var currentHum = daily[i].humidity;
-     var currentWind = daily[i].wind_speed;
-     var currentUV  = daily[i].uvi;
+        //get current temp, hum, wind, uv
+        var currentTemp = daily[i].temp.day;
+        var currentHum = daily[i].humidity;
+        var currentWind = daily[i].wind_speed;
+        var currentUV  = daily[i].uvi;
  
-     //create p elements to hold weather data
-     var tempEl = document.createElement("p");
-     var humEl = document.createElement("p");
-     var winEl = document.createElement("p");
-     var uvEl = document.createElement("p");
+        //create p elements to hold weather data
+        var tempEl = document.createElement("p");
+        var humEl = document.createElement("p");
+        var winEl = document.createElement("p");
+        var uvEl = document.createElement("p");
  
-     //append weather data to temp container
-     tempEl.textContent = "Temperature: " + currentTemp;
-     var tempSpan = document.createElement("span");
-     tempSpan.innerHTML= "&#176";
-     tempEl.appendChild(tempSpan);
-     humEl.textContent ="Humidity: " + currentHum + "%";
-     winEl.textContent = "Wind Speed: " + currentWind + "mph";
-     uvEl.textContent = "UV Index: " + currentUV;
-     tempContainer.appendChild(tempEl);
-     tempContainer.appendChild(humEl);
-     tempContainer.appendChild(winEl);
-     tempContainer.appendChild(uvEl);
+        //append weather data to temp container
+        tempEl.textContent = "Temperature: " + currentTemp;
+        var tempSpan = document.createElement("span");
+        tempSpan.innerHTML= "&#176";
+        tempEl.appendChild(tempSpan);
+        humEl.textContent ="Humidity: " + currentHum + "%";
+        winEl.textContent = "Wind Speed: " + currentWind + "mph";
+        uvEl.textContent = "UV Index: " + currentUV;
+        tempContainer.appendChild(tempEl);
+        tempContainer.appendChild(humEl);
+        tempContainer.appendChild(winEl);
+        tempContainer.appendChild(uvEl);
 
-     //append temp container to current weather container
-    currentContainer.appendChild(tempContainer);
+        //append temp container to current weather container
+        currentContainer.appendChild(tempContainer);
 
     }
     
@@ -174,5 +176,16 @@ var dateObject = new Date(milliseconds)
 return (dateObject);
 }
 
-getCoorApi(cityName,stateName);
 
+var taskButtonHandler = function (event) {
+    event.preventDefault();
+    //get city and state input
+
+    var cityInput = document.querySelector("input[name='city']").value;
+    console.log(cityInput);
+
+    var stateInput = document.querySelector("select[id='state'").value;
+    console.log(stateInput);
+}
+
+formEl.addEventListener("click", taskButtonHandler);
