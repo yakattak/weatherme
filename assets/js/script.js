@@ -1,5 +1,7 @@
-var cityName = "albany";
+var cityName = "Albany";
 var stateName = "Georgia";
+
+
 
 
 
@@ -11,7 +13,7 @@ var getWeatherApi =function(cityLat,cityLon, city, state) {
         if (response.ok) {
             response.json().then(function(data) {
                 //pass current to function to populate the current information
-                popCurrent(data.current);
+                popCurrent(data.current, city, state);
 
                 //pass daily to function to pupulate the daily information
                 popFuture(data.daily);
@@ -38,6 +40,7 @@ var getCoorApi = function(city, state) {
                         //console.log(data);
                         var cityLon = data[i].lon;
                         var cityLat = data[i].lat;
+                        var city = data[i].name;
                         //console.log(cityLat,cityLon, cityState, cityCountry);
                         getWeatherApi(cityLat, cityLon, city, state);
                         
@@ -48,17 +51,76 @@ var getCoorApi = function(city, state) {
     });
 }
 
-var popCurrent = function(current){
+var popCurrent = function(current, city, state){
+
+    //getdate
+
+    var date = calcDate (current.dt);
+
+    //day/month/year
+    day = date.getDate();
+    month = date.getMonth() + 1;
+    year = date.getFullYear();
+
+    //console.log(current);
+
+    //get container for current weather
+    var currentContainer = document.querySelector("#current-city");
+
+    //create container to be removed when new city selected
+    var tempContainer = document.createElement("div");
+
+    //append 
+    var cityNameEl = document.createElement("p");
+    cityNameEl.textContent = city + ", " + state + " (" + month + "/" + day +"/" + year + ")";
+    tempContainer.appendChild(cityNameEl);
+    
+    //get current temp, hum, wind, uv
     var currentTemp = current.temp;
     var currentHum = current.humidity;
     var currentWind = current.wind_speed;
     var currentUV  = current.uvi;
 
+    //create p elements to hold weather data
+    var tempEl = document.createElement("p");
+    var humEl = document.createElement("p");
+    var winEl = document.createElement("p");
+    var uvEl = document.createElement("p");
+
+    //append weather data to temp container
+    tempEl.textContent = "Temperature: " + currentTemp;
+    var tempSpan = document.createElement("span");
+    tempSpan.innerHTML= "&#176";
+    tempEl.appendChild(tempSpan);
+    humEl.textContent ="Humidity: " + currentHum + "%";
+    winEl.textContent = "Wind Speed: " + currentWind + "mph";
+    uvEl.textContent = "UV Index: " + currentUV;
+    tempContainer.appendChild(tempEl);
+    tempContainer.appendChild(humEl);
+    tempContainer.appendChild(winEl);
+    tempContainer.appendChild(uvEl);
+
+    //append temp container to current weather container
+    currentContainer.appendChild(tempContainer);
+
 };
 
 var popFuture = function(daily){
-    console.log(daily);
+    //console.log(daily);
+    
 
+    
+
+
+
+}
+
+//function to get date
+var calcDate = function(unixTimeStamp) {
+var milliseconds = unixTimeStamp * 1000 
+var dateObject = new Date(milliseconds)
+console.log (dateObject);
+return (dateObject);
 }
 
 getCoorApi(cityName,stateName);
