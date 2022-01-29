@@ -152,6 +152,7 @@
     margin: 0 0 20px 0;
     border: 3px solid var(--dark);
     border-radius: var(--border-radius);
+    background-color: rgb(185, 183, 181);
     color: black;
   }
   
