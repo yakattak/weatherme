@@ -286,7 +286,7 @@ var loadLocal = function() {
     // if there are no tasks, set tasks to an empty array and return out of the function
     if (!searchHistory) {
         searchHistory = [];
-      return false;
+        return false;
     }
     //console.log("Saved tasks found!");
     // else, load up saved tasks
